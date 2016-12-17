@@ -35,5 +35,3 @@
             (char-by-idx (+ (idx-in-alfabet letter)
                             (idx-in-alfabet key))))]
     (trans-str _vigenere plain (cycle key-str))))
-
-(defn polybius)
