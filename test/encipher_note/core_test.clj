@@ -1,6 +1,6 @@
-(ns coding-note.core-test
+(ns encipher-note.core-test
   (:require [clojure.test :refer :all]
-            [coding-note.core :refer :all]))
+            [encipher-note.core :refer :all]))
 
 (deftest caesar-shift-test
   (testing "Should CAESAR work"

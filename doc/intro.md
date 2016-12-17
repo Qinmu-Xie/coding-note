@@ -1,4 +1,4 @@
-# Introduction to coding-note
+# Introduction to encipher-note
 
 Practice clojure by implementing classic encipher method
 

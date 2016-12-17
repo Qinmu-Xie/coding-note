@@ -1,4 +1,4 @@
-(ns coding-note.core
+(ns encipher-note.core
   (:require [clojure.string :as string]))
 
 ;; lowercase alfabet
