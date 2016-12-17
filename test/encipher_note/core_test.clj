@@ -17,6 +17,14 @@
 
 (deftest vigenere-test
   (testing "should VIGENERE work"
-    (is (= (vigenere "tobeornottobethatisthequestion"
+    (is (= (vigenere "Tobeornottobethatisthequestion"
                      "have")
            "aowivrisatjfltceainxoelylsomvn"))))
+
+(deftest multiplication-shift-test
+  (testing "Should MULTIPLICATION work"
+    (is (= (multiplication-shift "xy z" 3) "ru x"))))
+
+(deftest affine-shift-test
+  (testing "Should AFFINE work"
+    (is (= (affine-shift "xy z" 3 3) "ux a"))))
