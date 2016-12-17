@@ -1,5 +1,10 @@
-(ns encipher-note.core
-  (:require [clojure.string :as string]))
+(ns encipher_note.core
+  (:require [clojure.string :as string]
+            [clojure.core.matrix :as mx]))
+
+;; use for debug
+(defn pp [x]
+  (do (prn x) x))
 
 ;; lowercase alphabet
 (def alphabet "abcdefghijklmnopqrstuvwxyz")
@@ -56,9 +61,9 @@
   (trans-str #(char-by-idx (+ shift (* factor (idx-in-alphabet %))))
              plain))
 
-(defn hill-cipher
+(defn hill-encipher
   ([plain hill-matrix]
-   (hill-cipher plain hill-matrix \e))
+   (hill-encipher plain hill-matrix \e))
   ([plain hill-matrix pad]
    (let [n (count (first hill-matrix))]
      (->> (.toLowerCase plain)

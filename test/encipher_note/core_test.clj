@@ -1,6 +1,6 @@
 (ns encipher-note.core-test
   (:require [clojure.test :refer :all]
-            [encipher-note.core :refer :all]))
+            [encipher_note.core :refer :all]))
 
 (deftest caesar-shift-test
   (testing "Should CAESAR work"
@@ -31,7 +31,7 @@
 
 (deftest hill-cipher-test
   (testing "Should HILL CIPHER work"
-    (is (= (hill-cipher "hithere" [[1 3] [0 2]])
+    (is (= (hill-encipher "hithere" [[1 3] [0 2]])
            "irrpgjtj"))
-    (is (= (hill-cipher "WEREDONE" [[1 7] [0 3]])
+    (is (= (hill-encipher "WEREDONE" [[1 7] [0 3]])
            "foaoeswo"))))
