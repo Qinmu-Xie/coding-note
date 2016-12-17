@@ -30,9 +30,8 @@
        (apply interleave)
        (string/join "")))
 
-(defn vigenere-trans [letter key]
-  (char-by-idx (+ (idx-in-alfabet letter)
-                  (idx-in-alfabet key))))
-
 (defn vigenere [plain key-str]
-  (trans-str vigenere-trans plain (cycle key-str)))
+  (letfn [(_vigenere [letter key]
+            (char-by-idx (+ (idx-in-alfabet letter)
+                            (idx-in-alfabet key))))]
+    (trans-str _vigenere plain (cycle key-str))))
