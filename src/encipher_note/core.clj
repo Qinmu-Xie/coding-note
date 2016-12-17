@@ -7,7 +7,7 @@
 ;; make f only work on alphabet letter
 (defn letter-change [f]
   (fn [letter & args]
-    (if (some #{letter} alphabet)
+    (if (some #{(java.lang.Character/toLowerCase letter)} alphabet)
         (apply f letter args)
         letter)))
 
@@ -20,9 +20,15 @@
   (- (int (java.lang.Character/toLowerCase letter))
      (int \a)))
 
+(defn letter2number [letter]
+  (inc (idx-in-alphabet letter)))
+
 ;; get char by index
 (defn char-by-idx [idx]
   (char (+ (mod idx 26) (int \a))))
+
+(defn number2letter [number]
+  (char-by-idx (dec number)))
 
 (defn caesar-shift [plain shift]
   (trans-str #(char-by-idx (+ shift (idx-in-alphabet %)))
@@ -44,8 +50,21 @@
 (defn multiplication-shift [plain factor]
   (trans-str #(char-by-idx (* factor (idx-in-alphabet %)))
              plain))
-             
+
 ;; combination of caesar & multiplication
 (defn affine-shift [plain factor shift]
   (trans-str #(char-by-idx (+ shift (* factor (idx-in-alphabet %))))
              plain))
+
+(defn hill-cipher
+  ([plain hill-matrix]
+   (hill-cipher plain hill-matrix \e))
+  ([plain hill-matrix pad]
+   (let [n (count (first hill-matrix))]
+     (->> (.toLowerCase plain)
+          (partition n n [pad])
+          (#(interleave % %))
+          (map #(map letter2number %))
+          (map #(apply + (apply map * %&)) (cycle hill-matrix))
+          (map number2letter)
+          (string/join "")))))

@@ -28,3 +28,10 @@
 (deftest affine-shift-test
   (testing "Should AFFINE work"
     (is (= (affine-shift "xy z" 3 3) "ux a"))))
+
+(deftest hill-cipher-test
+  (testing "Should HILL CIPHER work"
+    (is (= (hill-cipher "hithere" [[1 3] [0 2]])
+           "irrpgjtj"))
+    (is (= (hill-cipher "WEREDONE" [[1 7] [0 3]])
+           "foaoeswo"))))
