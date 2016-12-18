@@ -1,9 +1,9 @@
-(ns encipher_note.core
+(ns encipher-note.core
   (:require [clojure.string :as string]
             [clojure.core.matrix :as mx]))
 
 ;; use for debug
-(defn pp [x]
+(defn pp [& x]
   (do (prn x) x))
 
 ;; lowercase alphabet
@@ -73,3 +73,51 @@
           (map #(apply + (apply map * %&)) (cycle hill-matrix))
           (map number2letter)
           (string/join "")))))
+
+(def playfair-matrix [[\c \i \p \h \e]
+                      [\r \a \b \d \f]
+                      [\g \k \l \m \n]
+                      [\o \q \s \t \u]
+                      [\v \w \x \y \z]])
+
+(def playfair-map
+  (into {} (for [x (range 5) y (range 5)]
+                [(mx/mget playfair-matrix x y) [x y]])))
+
+(defn playfair-pair [[c1 c2]]
+  (letfn [(round-get [x y]
+            (mx/mget playfair-matrix (mod x 5) (mod y 5)))
+          (eq-row? [idx1 idx2]
+            (apply = (map first [idx1 idx2])))
+          (eq-col? [idx1 idx2]
+            (apply = (map second [idx1 idx2])))]
+    (let [c1-idx (playfair-map c1)
+          c2-idx (playfair-map c2)]
+      (cond (eq-row? c1-idx c2-idx)
+            [(round-get (first c1-idx) (inc (second c1-idx)))
+             (round-get (first c2-idx) (inc (second c2-idx)))]
+            (eq-col? c1-idx c2-idx)
+            [(round-get (inc (first c1-idx)) (second c1-idx))
+             (round-get (inc (first c2-idx)) (second c2-idx))]
+            :defaults
+            [(round-get (first c1-idx) (second c2-idx))
+             (round-get (first c2-idx) (second c1-idx))]))))
+
+(defn pair-chars [[f s & other]]
+  (cond (nil? f)
+        (list)
+        (nil? s)
+        (cons f (cons (if (= f \x) \q \x) '()))
+        (= f s)
+        (cons f (cons (if (= f \x) \q \x)
+                      (pair-chars (cons s other))))
+        :default
+        (cons f (cons s (pair-chars other)))))
+
+(defn playfair [plain]
+  (->> (string/replace plain #"j" "i")
+       (pair-chars)
+       (partition 2)
+       (map playfair-pair)
+       (flatten)
+       (string/join "")))
